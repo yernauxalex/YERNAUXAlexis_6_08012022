@@ -2,12 +2,14 @@
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
+const dotenv = require("dotenv");
+dotenv.config();
 
 // Récupération des logs de la DB
 const log = require ('./log_DB');
 
 // mongoDB
-mongoose.connect(`${log.MONGOLOG}`, {
+mongoose.connect(`${process.env.MONGOLOG}`, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 	})
