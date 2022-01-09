@@ -5,6 +5,9 @@ const mongoose = require('mongoose');
 const dotenv = require("dotenv");
 dotenv.config();
 
+// Immport routes
+const userRoutes = require('./routes/user');
+
 // MongoDB
 mongoose.connect(`${process.env.MONGOLOG}`, {
 		useNewUrlParser: true,
@@ -27,6 +30,12 @@ app.use((req, res, next) => {
 	next()
 })
 
+// Middleware
+// Utilisation du body sur req
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', userRoutes);
 
 
 module.exports = app;
