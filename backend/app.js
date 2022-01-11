@@ -7,6 +7,7 @@ dotenv.config();
 
 // Immport routes
 const userRoutes = require('./routes/user');
+const saucesRoutes = require('./routes/sauces');
 
 // MongoDB
 mongoose.connect(`${process.env.MONGOLOG}`, {
@@ -36,6 +37,6 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', userRoutes);
-
+app.use('/api/sauces', saucesRoutes);
 
 module.exports = app;
