@@ -8,9 +8,7 @@ exports.createSauce = (req, res, next) => {
     // Crée une instance de sauce selon son model
     const sauce = new Sauce({
 		...sauceObject,
-		imageUrl: `${req.protocol}://${req.get('host')}/images/${
-			req.fs.filename
-		}`,
+		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 	});
     sauce
         .save()
@@ -32,6 +30,7 @@ exports.getOneSauce = (req, res, next) => {
 // Modification d'une sauce dans la DB
 exports.modifySauce = (req, res, next) => {
     const sauceObject = req.file
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
 		? {
 				...JSON.parse(req.body.sauce),
 				imageUrl: `${req.protocol}://${req.get('host')}/images/${
@@ -54,5 +53,13 @@ exports.deleteSauce = (req, res, next) => {
 
 // Récupération de toutes les sauces présentes dans la DB
 exports.getAllSauces = (req, res, next) => {
-
+	Sauce.find()
+		.then((sauces) => {
+			res.status(200).json(sauces);
+		})
+		.catch((error) => {
+			res.status(400).json({
+				error: error,
+			});
+		});
 };

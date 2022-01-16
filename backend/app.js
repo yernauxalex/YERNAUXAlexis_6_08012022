@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 const dotenv = require("dotenv");
 dotenv.config();
+const path = require('path');
 
 // Immport routes
 const userRoutes = require('./routes/user');
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 // Middleware
 // Utilisation du body sur req
 app.use(express.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Routes
 app.use('/api/auth', userRoutes);
