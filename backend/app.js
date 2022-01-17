@@ -9,6 +9,7 @@ const path = require('path');
 // Immport routes
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
+//const likeRoutes = require('./routes/like');
 
 // MongoDB
 mongoose.connect(`${process.env.MONGOLOG}`, {
@@ -40,5 +41,6 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Routes
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', saucesRoutes);
+//app.use('/api/sauces', likeRoutes);
 
 module.exports = app;
