@@ -8,6 +8,10 @@ exports.likeStatus = (req, res) => {
 	// on cherche la sauce sélectionnée
 	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => {
+			// Vérification de l'userId
+			let userLike = sauce.usersLiked.find((id) => id === userId);
+			let userDislike = sauce.usersDisliked.find((id) => id === userId);
+			
 			switch (like) {
 				// like
 				case 1:
