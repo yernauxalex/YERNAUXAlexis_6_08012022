@@ -3,22 +3,22 @@ const fs = require('fs');
 
 // Création d'une nouvelle sauce dans la DB
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(req.body.sauce);
-    delete sauceObject._id;
-    // Crée une instance de sauce selon son model
-    const sauce = new Sauce({
+	const sauceObject = JSON.parse(req.body.sauce);
+	delete sauceObject._id;
+	// Crée une instance de sauce selon son model
+	const sauce = new Sauce({
 		...sauceObject,
 		imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 	});
-    sauce
-        .save()
-        .then(() => res.status(201).json({message: 'Sauce enregistrée'}))
-        .catch((error) => res.status(400).json({message: error}));
+	sauce
+		.save()
+		.then(() => res.status(201).json({ message: 'Sauce enregistrée' }))
+		.catch((error) => res.status(400).json({ message: error }));
 };
 
 // Recherche d'une sauce dans la DB
 exports.getOneSauce = (req, res, next) => {
-    Sauce.findOne({ _id: req.params.id }) 
+	Sauce.findOne({ _id: req.params.id })
 		.then((sauce) => {
 			res.status(200).json(sauce)
 		})
@@ -29,14 +29,13 @@ exports.getOneSauce = (req, res, next) => {
 
 // Modification d'une sauce dans la DB
 exports.modifySauce = (req, res, next) => {
-    const sauceObject = req.file
-	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+	const sauceObject = req.file
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
 		? {
-				...JSON.parse(req.body.sauce),
-				imageUrl: `${req.protocol}://${req.get('host')}/images/${
-					req.file.filename
+			...JSON.parse(req.body.sauce),
+			imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename
 				}`,
-		  }
+		}
 		: { ...req.body }
 	Sauce.updateOne(
 		{ _id: req.params.id },

@@ -9,29 +9,29 @@ const path = require('path');
 // Immport routes
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
-//const likeRoutes = require('./routes/like');
+const likeRoutes = require('./routes/like');
 
 // MongoDB
 mongoose.connect(`${process.env.MONGOLOG}`, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-	})
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+})
 	.then(() => console.log('Connected to MongoDB'))
 	.catch(() => console.log('Connection failed'));
 
 // CORS
 app.use((req, res, next) => {
 	// Accéder à l'API depuis n'importe où
-	res.setHeader('Access-Control-Allow-Origin', '*')
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	// Ajouter les headers sur nos réponses
 	res.setHeader(
 		'Access-Control-Allow-Headers',
 		'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
-	)
+	);
 	// Permet d'utiliser le CRUD
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-	next()
-})
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+	next();
+});
 
 // Middleware
 // Utilisation du body sur req
@@ -41,6 +41,6 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 // Routes
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', saucesRoutes);
-//app.use('/api/sauces', likeRoutes);
+app.use('/api/sauces', likeRoutes);
 
 module.exports = app;

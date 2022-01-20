@@ -2,7 +2,7 @@ const Sauce = require('../models/Sauce');
 
 // Etat du bouton like
 exports.likeStatus = (req, res) => {
-    const like = req.body.like
+	const like = req.body.like
 	const userId = req.body.userId
 
 	// on cherche la sauce sélectionnée
@@ -11,7 +11,7 @@ exports.likeStatus = (req, res) => {
 			// Vérification de l'userId
 			let userLike = sauce.usersLiked.find((id) => id === userId);
 			let userDislike = sauce.usersDisliked.find((id) => id === userId);
-			
+
 			switch (like) {
 				// like
 				case 1:
@@ -31,7 +31,7 @@ exports.likeStatus = (req, res) => {
 							(id) => id !== userId
 						);
 					};
-					break
+					break;
 
 				// dislike
 				case -1:
@@ -41,7 +41,7 @@ exports.likeStatus = (req, res) => {
 			sauce
 				.save()
 				.then(() => res.status(201).json({ message: 'save sauce' }))
-				.catch((error) => res.status(400).json({ error }))
+				.catch((error) => res.status(400).json({ error }));
 		})
 		.catch((error) => res.status(500).json({ error }));
 };
