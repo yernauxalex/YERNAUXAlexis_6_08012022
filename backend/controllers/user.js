@@ -4,19 +4,35 @@ const User = require('../models/User');
 
 // Création d'un nouveau compte
 exports.signup = (req, res) => {
-    bcrypt
-        .hash(req.body.password, 10)
-        .then((hash) => {
-            const user = new User({
-                email: req.body.email,
-                password: hash,
-            });
-            user
-                .save()
-                .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
-                .catch((error) => res.status(400).json({ error }));
+    const tempEmail = req.body.email
+    const tempPass = req.body.password
+    const patternMail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+    const patternPass = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.]).{8,}$/i;
+    if (tempEmail.match(patternMail)){
+        if (tempPass.match(patternPass)){
+            bcrypt
+                .hash(req.body.password, 10)
+                .then((hash) => {
+                    const user = new User({
+                        email: req.body.email,
+                        password: hash,
+                    });
+                user
+                    .save()
+                    .then(() => res.status(201).json({ message: 'Utilisateur crée' }))
+                    .catch((error) => res.status(400).json({ error }));
         })
         .catch((error) => res.status(500).json({ error }));
+        }
+        else{
+            return res.status(400).json({ message: 'Format du  mot de passe invalide, 8 caratères minimum, dont une majuscule, une minuscule, un caractrère spécial (#?!@$%^&*-.) et un chiffre'})
+
+        }
+    }
+    else{
+        return res.status(400).json({ message: 'Format du mail invalide'})
+    }
+    
 };
 
 // Connection à un compte existant
