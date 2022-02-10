@@ -29,12 +29,19 @@ exports.getOneSauce = (req, res, next) => {
 
 // Modification d'une sauce dans la DB
 exports.modifySauce = (req, res, next) => {
+	// Si import d'une nouvelle image on supprime l'ancienne du serveur
+	if(req.file){
+		Sauce.findOne({ _id: req.params.id })
+		.then((sauce) => {
+			const filename = sauce.imageUrl.split('/images/')[1];
+			fs.unlink(`images/${filename}`, () => {});
+		})
+		.catch((error) => res.status(500).json({ error }));
+	}
 	const sauceObject = req.file
-		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
 		? {
 			...JSON.parse(req.body.sauce),
-			imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename
-				}`,
+			imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
 		}
 		: { ...req.body }
 	Sauce.updateOne(
