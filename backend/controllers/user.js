@@ -1,15 +1,24 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const emailValidator = require('email-validator');
+const passwordValidator = require('password-validator');
 const User = require('../models/User');
+
+// Création du schéma pour le mot de passe
+const schema = new passwordValidator();
+schema
+    .is().min(8)
+    .is().max(100)
+    .has().uppercase()
+    .has().lowercase()
+    .has().symbols()
+    .has().digits(1)
+    .has().not().spaces()
 
 // Création d'un nouveau compte
 exports.signup = (req, res) => {
-    const tempEmail = req.body.email
-    const tempPass = req.body.password
-    const patternMail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
-    const patternPass = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.]).{8,}$/i;
-    if (tempEmail.match(patternMail)){
-        if (tempPass.match(patternPass)){
+    if (emailValidator.validate(req.body.email)){
+        if (schema.validate(req.body.password)){
             bcrypt
                 .hash(req.body.password, 10)
                 .then((hash) => {
