@@ -1,5 +1,6 @@
 // Import des packages
 const express = require('express');
+const expressSanitizer = require('express-sanitizer');
 const app = express();
 const mongoose = require('mongoose');
 const dotenv = require("dotenv");
@@ -36,6 +37,12 @@ app.use((req, res, next) => {
 // Middleware
 // Utilisation du body sur req
 app.use(express.json());
+app.use(expressSanitizer());
+app.post('/', function(req, res, next) {
+	// replace an HTTP posted body property with the sanitized string
+	const sanitizedString = req.sanitize(req.body.propertyToSanitize);
+	res.send({ sanitized: sanitizedString });
+  });
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Routes
